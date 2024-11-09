@@ -1,31 +1,36 @@
+import 'package:cook_me_book/data/recipe.dart';
+import 'package:cook_me_book/feature/search/search_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-const _menuItemTexts = [
-  "Wszystkie",
-  "Dania główne",
-  "Zupy",
-  "Sałatki",
-  "Przekąski",
-  "Ciasta",
-];
-
-class AppNavMenu extends HookWidget {
+class AppNavMenu extends HookConsumerWidget {
   const AppNavMenu({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final selectedIndex = useState(0);
 
     return Material(
       color: Colors.transparent,
       child: Column(children: [
-        for (int i = 0; i < 5; i++)
+        _NavItem(
+          "Wszystkie",
+          0 == selectedIndex.value,
+          () {
+            selectedIndex.value = 0;
+            ref.read(searchStateProvider.notifier).clearCategory();
+          },
+        ),
+        for (int i = 1; i <= RecipeCategory.values.length; i++)
           _NavItem(
-            _menuItemTexts[i],
+            RecipeCategory.values[i - 1].name,
             i == selectedIndex.value,
             () {
               selectedIndex.value = i;
+              ref
+                  .read(searchStateProvider.notifier)
+                  .setCategory(RecipeCategory.values[i - 1]);
             },
           )
       ]),

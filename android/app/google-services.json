@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "889060739971",
+    "firebase_url": "https://personalchef-87a32.firebaseio.com",
+    "project_id": "personalchef-87a32",
+    "storage_bucket": "personalchef-87a32.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:889060739971:android:7db422160d73a0cf03c4b6",
+        "android_client_info": {
+          "package_name": "com.tommannson.cookme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "889060739971-vsrq3klcg6r9mluc6rqtnoiv4e6vmqfp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTJB0pxHdRONeX87BRJrNOMHl6DcHhnc8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "889060739971-15bb487k2e3536tous0vo4opupmbgch6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:889060739971:android:7db422160d73a0cf03c4b6",
+        "android_client_info": {
+          "package_name": "com.tommannson.cookme.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "889060739971-vsrq3klcg6r9mluc6rqtnoiv4e6vmqfp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTJB0pxHdRONeX87BRJrNOMHl6DcHhnc8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "889060739971-15bb487k2e3536tous0vo4opupmbgch6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

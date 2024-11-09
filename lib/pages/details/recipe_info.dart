@@ -1,56 +1,72 @@
+import 'package:cook_me_book/components/basic/title_text.dart';
+import 'package:cook_me_book/data/recipe.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../components/utils/custom_fonts.dart';
-import 'bulet_point.dart';
 
 class RecipeInfo extends StatelessWidget {
-  const RecipeInfo({super.key});
+  final Recipe recipe;
+  final VoidCallback onDelete;
+
+  const RecipeInfo({
+    required this.recipe,
+    required this.onDelete,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final styleTitleLarge = Theme.of(context)
-        .textTheme
-        .headlineMedium!
-        .copyWith(fontWeight: FontWeight.bold);
-    final styleTitle = Theme.of(context).textTheme.titleMedium!;
-
     return Expanded(
       flex: 2,
-      child: Container(
-        color: Colors.white,
-        width: double.infinity,
-        height: double.infinity,
-        child: SingleChildScrollView(
+      child: _RecipeInfoContent(
+        recipe: recipe,
+        onDelete: onDelete,
+      ),
+    );
+  }
+}
+
+class _RecipeInfoContent extends StatelessWidget {
+  final Recipe recipe;
+  final VoidCallback onDelete;
+
+  const _RecipeInfoContent({
+    required this.recipe,
+    required this.onDelete,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      width: double.infinity,
+      height: double.infinity,
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(32),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: EdgeInsets.all(32),
-                child: Column(
-                  children: [
-                    RecipeNameBar(
-                      styleTitleLarge: styleTitleLarge,
-                      action: () {
-                        return EditButton(
-                          onClick: () {},
-                        );
-                      },
-                    ),
-                    RecipeNutritions(),
-                    SizedBox(height: 32,),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Przepis", style: styleTitle),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        for (int i = 0; i < 15; i++)
-                          BulletPointItem(ingredientName: "Twaróg rozetrzeć widelcem (nie musi być dokładnie) i zmiksować z jajkiem oraz dowolnym słodzidłem. Twaróg rozetrzeć widelcem (nie musi być dokładnie) i zmiksować z jajkiem oraz dowolnym słodzidłem.", number: i + 1,)
-                      ],
-                    )
-                  ],
+              RecipeNameBar(
+                name: recipe.name,
+                deleteAction: () => IconButton(
+                  onPressed: onDelete,
+                  icon: const Icon(Icons.delete, size: 16),
                 ),
+                editAction: () => IconButton(
+                  onPressed: () => context.push("/edit/${recipe.id}"),
+                  icon: const Icon(CustomIcons.pen, size: 16),
+                ),
+              ),
+              RecipeNutritions(
+                nutritions: recipe.nutritionalInfo,
+                time: recipe.preparationTime,
+                serving: recipe.servings,
+              ),
+              const SizedBox(height: 32),
+              _RecipeSteps(
+                steps: recipe.recipeSteps,
               ),
             ],
           ),
@@ -60,62 +76,60 @@ class RecipeInfo extends StatelessWidget {
   }
 }
 
-class EditButton extends StatelessWidget {
-  final VoidCallback onClick;
+class _RecipeSteps extends StatelessWidget {
+  final String steps;
 
-  const EditButton({
-    required this.onClick,
-    super.key,
+  const _RecipeSteps({
+    required this.steps,
   });
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: onClick,
-      icon: const Icon(
-        CustomIcons.pen,
-        size: 16,
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const TitleText("Przepis"),
+        const SizedBox(height: 8),
+        Text(steps),
+      ],
     );
   }
 }
 
 typedef WidgetFactory = Widget Function();
 
+@immutable
 class RecipeNutritions extends StatelessWidget {
-  const RecipeNutritions({super.key});
+  final String time;
+  final int serving;
+  final NutritionalInfo nutritions;
+
+  const RecipeNutritions({
+    required this.time,
+    required this.serving,
+    required this.nutritions,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    const protein = 8;
-    const carbs = 20;
-    const fat = 2.5;
+    double protein = nutritions.protein;
+    double carbs = nutritions.carbs;
+    double fat = nutritions.fat;
 
     return Row(
       children: [
-        Icon(Icons.access_time),
-        SizedBox(
-          width: 8,
+        MeterInfo(
+          icon: Icons.access_time,
+          time: time,
         ),
-        Text("2 dni"),
-        SizedBox(
-          width: 16,
+        MeterInfo(
+          icon: Icons.access_time,
+          time: "$serving porcji",
         ),
-        Icon(Icons.access_time),
-        SizedBox(
-          width: 8,
-        ),
-        Text("6 porcji"),
-        SizedBox(
-          width: 16,
-        ),
-        Icon(Icons.access_time),
-        SizedBox(
-          width: 8,
-        ),
-        Text("150 kcal"),
-        SizedBox(
-          width: 16,
+        MeterInfo(
+          icon: Icons.access_time,
+          time: "${nutritions.calories} kcal",
         ),
         Text("(B=$protein\g, W=$carbs\g, T=$fat\g)"),
       ],
@@ -123,25 +137,60 @@ class RecipeNutritions extends StatelessWidget {
   }
 }
 
-class RecipeNameBar extends StatelessWidget {
-  const RecipeNameBar(
-      {super.key, required this.styleTitleLarge, required this.action});
+class MeterInfo extends StatelessWidget {
+  final String time;
+  final IconData icon;
 
-  final TextStyle styleTitleLarge;
-  final WidgetFactory action;
+  const MeterInfo({
+    required this.time,
+    required this.icon,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon),
+        const SizedBox(width: 8),
+        Text(time),
+        const SizedBox(width: 16)
+      ],
+    );
+  }
+}
+
+class RecipeNameBar extends StatelessWidget {
+  const RecipeNameBar(
+      {super.key,
+      required this.editAction,
+      required this.deleteAction,
+      required this.name});
+
+  final WidgetFactory editAction;
+  final WidgetFactory deleteAction;
+
+  final String name;
+
+  @override
+  Widget build(BuildContext context) {
+    final styleTitleLarge = Theme.of(context)
+        .textTheme
+        .headlineMedium!
+        .copyWith(fontWeight: FontWeight.bold);
+
     return Row(
       children: [
         Expanded(
           flex: 1,
           child: Text(
-            "Pieczone pączki twarogowe (FIT)",
+            name,
             style: styleTitleLarge,
           ),
         ),
-        action(),
+        deleteAction(),
+        editAction(),
       ],
     );
   }

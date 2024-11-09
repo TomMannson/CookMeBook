@@ -1,60 +1,71 @@
+import 'package:cook_me_book/components/basic/decorated_form_field.dart';
+import 'package:cook_me_book/components/basic/title_text.dart';
+import 'package:cook_me_book/components/style/input_style.dart';
+import 'package:cook_me_book/pages/create/progress/progress_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:functional_widget_annotation/functional_widget_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-part 'recipe_portions_input.g.dart';
+const servingNumberInputWidth = 80.0;
+const timeInputWidth = 160.0;
 
-@hcwidget
-Widget _recipePortoinsField(BuildContext context) {
-  final style = Theme.of(context)
-      .textTheme
-      .titleMedium!
-      .copyWith(fontWeight: FontWeight.bold);
-  final nameController = useTextEditingController();
+class RecipePortoinsField extends HookConsumerWidget {
+  final TextEditingController portionsController;
+  final TextEditingController timeController;
 
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text(
-        "Ilość porcji",
-        style: style,
-      ),
-      SizedBox(
-        height: 16,
-      ),
-      Row(
-        children: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.remove),
+  const RecipePortoinsField(this.portionsController, this.timeController,
+      {super.key});
+
+  @override
+  Widget build(
+    BuildContext context,
+    WidgetRef ref,
+  ) {
+    final progressState = ref.watch(progressControllerProvider);
+
+    return Row(
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const TitleText("Ilość porcji"),
+              Row(
+                children: [
+                  SizedBox(
+                    width: servingNumberInputWidth,
+                    child: TextField(
+                      enabled: !progressState.inProgress,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      decoration: inputDecoration(),
+                      controller: portionsController,
+                    ),
+                  )
+                ],
+              )
+            ],
           ),
-          SizedBox(
-            width: 80,
-            child: TextField(
-              keyboardType: TextInputType.number,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              decoration: new InputDecoration(
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.blue,
+        ),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const TitleText("Czas przygotowywania"),
+              Row(
+                children: [
+                  SizedBox(
+                    width: timeInputWidth,
+                    child: DecoratedFormField(
+                      controller: timeController,
+                    ),
                   ),
-                ),
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.grey,
-                  ),
-                ),
-                hintText: '',
-              ),
-              controller: nameController,
-              onChanged: (value) {},
-            ),
+                ],
+              )
+            ],
           ),
-          IconButton(onPressed: () {}, icon: Icon(Icons.add)),
-        ],
-      )
-    ],
-  );
+        ),
+      ],
+    );
+  }
 }

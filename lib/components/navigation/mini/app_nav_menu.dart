@@ -1,15 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-const _menuItemTexts = [
-  "Wszystkie",
-  "Dania główne",
-  "Zupy",
-  "Sałatki",
-  "Przekąski",
-  "Ciasta",
-];
-
 class AppMiniNavMenu extends HookWidget {
   const AppMiniNavMenu({super.key});
 
@@ -20,10 +11,19 @@ class AppMiniNavMenu extends HookWidget {
     return Material(
       color: Colors.transparent,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
-          children: [for (int i = 0; i < 5; i++) IconButton(icon: const Icon(Icons.ac_unit, color: Colors.white,), onPressed: (){},)]),
+          children: [
+            for (int i = 0; i < 5; i++)
+              IconButton(
+                icon: const Icon(
+                  Icons.ac_unit,
+                  color: Colors.white,
+                ),
+                onPressed: () {},
+              )
+          ]),
     );
   }
 }

@@ -1,42 +1,33 @@
+import 'package:cook_me_book/components/basic/decorated_form_field.dart';
+import 'package:cook_me_book/components/basic/title_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:functional_widget_annotation/functional_widget_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-part 'recipe_name_input.g.dart';
+import 'ai_assisted_recipe_creation.dart';
 
-@hcwidget
-Widget _recipeNameInput(BuildContext context) {
-  final style = Theme.of(context)
-      .textTheme
-      .titleMedium!
-      .copyWith(fontWeight: FontWeight.bold);
-  final nameController = useTextEditingController();
+class RecipeTitleField extends HookConsumerWidget {
+  final TextEditingController titleController;
 
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text(
-        "Co przyrządzamy",
-        style: style,
-      ),
-      TextField(
-        decoration: new InputDecoration(
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Colors.blue,
+  const RecipeTitleField(this.titleController, {super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const TitleText("Co przyżądzamy"),
+        Row(
+          children: [
+            Expanded(
+              child: DecoratedFormField(
+                controller: titleController,
+              ),
             ),
-          ),
-          border: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Colors.grey,
-            ),
-          ),
-          hintText: '',
-        ),
-        controller: nameController,
-        onChanged: (value) {},
-      )
-    ],
-  );
+            const SizedBox(width: 8),
+            const AiAssistedRecipeCreation(),
+          ],
+        )
+      ],
+    );
+  }
 }

@@ -1,135 +1,85 @@
+import 'package:cook_me_book/components/basic/title_text.dart';
+import 'package:cook_me_book/components/style/input_style.dart';
+import 'package:cook_me_book/pages/create/form_state.dart';
+import 'package:cook_me_book/pages/create/progress/progress_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:functional_widget_annotation/functional_widget_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-part 'recipe_nutrition_picker.g.dart';
+class RecipeNutritionPicker extends HookConsumerWidget {
+  final RecipeNutritionsFormSection nutritionsFormSection;
 
-@hcwidget
-Widget _recipeNutritionPicker(BuildContext context) {
-  final style = Theme.of(context)
-      .textTheme
-      .titleMedium!
-      .copyWith(fontWeight: FontWeight.bold);
-  final nameController = useTextEditingController();
+  const RecipeNutritionPicker(this.nutritionsFormSection, {Key? key})
+      : super(key: key);
 
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text(
-        "Wartości odżywcze",
-        style: style,
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const TitleText("Wartości odżywcze"),
+        const Text("odpowiadające jednej porcji"),
+        const SizedBox(height: 8),
+        Row(
+          children: [
+            NutritionalValueField(
+              label: "kcal",
+              textController: nutritionsFormSection.caloriesController,
+              keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            ),
+            NutritionalValueField(
+              label: "Węgle",
+              textController: nutritionsFormSection.carbsController,
+            ),
+            NutritionalValueField(
+              label: "Białko",
+              textController: nutritionsFormSection.proteinsController,
+            ),
+            NutritionalValueField(
+              label: "Tłuszcz",
+              textController: nutritionsFormSection.fatsController,
+            ),
+          ],
+        )
+      ],
+    );
+  }
+}
+
+class NutritionalValueField extends HookConsumerWidget {
+  final String label;
+
+  final TextEditingController textController;
+
+  final TextInputType keyboardType;
+
+  final List<TextInputFormatter>? inputFormatters;
+
+  const NutritionalValueField({
+    required this.label,
+    required this.textController,
+    this.keyboardType = TextInputType.text,
+    this.inputFormatters,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final progressState = ref.watch(progressControllerProvider);
+
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: SizedBox(
+        width: 90,
+        child: TextField(
+          keyboardType: keyboardType,
+          inputFormatters: inputFormatters,
+          enabled: !progressState.inProgress,
+          decoration: inputDecoration(),
+          controller: textController,
+        ),
       ),
-      Text(
-        "odpowiadające jednej porcji",
-      ),
-      SizedBox(height: 16),
-      Row(
-        children: [
-          SizedBox(
-            width: 80,
-            child: TextField(
-              keyboardType: TextInputType.number,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              decoration: new InputDecoration(
-                label: Text("kcal"),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.blue,
-                  ),
-                ),
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.grey,
-                  ),
-                ),
-                hintText: '',
-              ),
-              controller: nameController,
-              onChanged: (value) {},
-            ),
-          ),
-          SizedBox(
-            width: 16,
-          ),
-          SizedBox(
-            width: 80,
-            child: TextField(
-              keyboardType: TextInputType.number,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              decoration: new InputDecoration(
-                label: Text("W"),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.blue,
-                  ),
-                ),
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.grey,
-                  ),
-                ),
-                hintText: '',
-              ),
-              controller: nameController,
-              onChanged: (value) {},
-            ),
-          ),
-          SizedBox(
-            width: 16,
-          ),
-          SizedBox(
-            width: 80,
-            child: TextField(
-              keyboardType: TextInputType.number,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              decoration: new InputDecoration(
-                label: Text("B"),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.blue,
-                  ),
-                ),
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.grey,
-                  ),
-                ),
-                hintText: '',
-              ),
-              controller: nameController,
-              onChanged: (value) {},
-            ),
-          ),
-          SizedBox(
-            width: 16,
-          ),
-          SizedBox(
-            width: 80,
-            child: TextField(
-              keyboardType: TextInputType.number,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              decoration: new InputDecoration(
-                label: Text("T"),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.blue,
-                  ),
-                ),
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.grey,
-                  ),
-                ),
-                hintText: '',
-              ),
-              controller: nameController,
-              onChanged: (value) {},
-            ),
-          ),
-        ],
-      )
-    ],
-  );
+    );
+  }
 }
