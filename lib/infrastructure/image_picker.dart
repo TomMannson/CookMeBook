@@ -19,6 +19,17 @@ class ImagePicker {
       return ImageLoadingError();
     }
   }
+
+  Future<ImageResult> loadImageFromCamera() async {
+    final galleryImage =
+        await _picker.pickImage(source: PackageImagePicker.ImageSource.camera);
+
+    if (galleryImage != null) {
+      return ImageLoaded(File(galleryImage.path));
+    } else {
+      return ImageLoadingError();
+    }
+  }
 }
 
 sealed class ImageResult {}

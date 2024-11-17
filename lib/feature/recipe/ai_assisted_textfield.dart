@@ -1,35 +1,58 @@
+import 'package:cook_me_book/components/style/input_style.dart';
 import 'package:cook_me_book/pages/create/progress/progress_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:cook_me_book/pages/create/recipe_extraction_state.dart';
 
-class AiAssistedRecipeCreation extends HookConsumerWidget {
-  const AiAssistedRecipeCreation({super.key});
+class AiAssistedTextField extends HookConsumerWidget {
+  final TextEditingController controller;
+
+  const AiAssistedTextField({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final step = ref.watch(recipeExtractionStateProvider).step;
+    final recipeExtraction = ref.watch(recipeExtractionStateProvider.notifier);
     final progressState = ref.watch(progressControllerProvider);
 
-    if (step == ProcessSteps.idle) {
-      return AiActionPicker(
-        menuEnabled: !progressState.inProgress,
-        onItemSelected: (value) {
-          final recipeExtractor =
-              ref.read(recipeExtractionStateProvider.notifier);
-          if (value == AiMenuItem.web) {
-            _displayTextInputDialog(context, onTextSelected: (value) {
-              recipeExtractor.startRecipeWebExtraction(value);
-            });
-          } else {
-            recipeExtractor.startRecipeExtraction(value);
-          }
-        },
-      );
-    } else {
-      return const CircularProgressIndicator();
-    }
+    return TextField(
+      contextMenuBuilder: (context, editableTextState) {
+        final List<ContextMenuButtonItem> buttonItems =
+            editableTextState.contextMenuButtonItems;
+
+        buttonItems.insert(
+            0,
+            ContextMenuButtonItem(
+              label: 'Quick Ai Camera extractor',
+              onPressed: () async {
+                ContextMenuController.removeAny();
+                final result = await recipeExtraction.startTextExtraction();
+                if (result != null) {
+                  Clipboard.setData(ClipboardData(text: result));
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        "Przetworzony text czeka. Urzyj opcji `Wklej`",
+                      ),
+                    ),
+                  );
+                }
+              },
+            ));
+
+        return AdaptiveTextSelectionToolbar.buttonItems(
+          anchors: editableTextState.contextMenuAnchors,
+          buttonItems: buttonItems,
+        );
+      },
+      enabled: !progressState.inProgress,
+      minLines: 6,
+      maxLines: 2000,
+      decoration: inputDecoration(),
+      controller: controller,
+    );
   }
 }
 

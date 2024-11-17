@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cook_me_book/components/basic/title_text.dart';
 import 'package:cook_me_book/data/recipe.dart';
 import 'package:cook_me_book/components/style/input_style.dart';
+import 'package:cook_me_book/feature/recipe/ai_assisted_textfield.dart';
 import 'package:cook_me_book/feature/recipe/recipe_name_input.dart';
 import 'package:cook_me_book/feature/recipe/recipe_nutrition_picker.dart';
 import 'package:cook_me_book/feature/recipe/recipe_portions_input.dart';

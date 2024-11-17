@@ -140,13 +140,13 @@ class _BottomBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
-      child: Row(
+      child: const Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Padding(
-            padding: const EdgeInsets.only(right: 8.0),
+            padding: EdgeInsets.only(right: 8.0),
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(8.0),
               child: SubmitButton(),
             ),
           )
@@ -157,14 +157,16 @@ class _BottomBar extends StatelessWidget {
 }
 
 class SubmitButton extends HookConsumerWidget {
+  const SubmitButton({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final saveAction = ref.watch(recipeSaveHandlerProvider);
     final progressState = ref.watch(progressControllerProvider);
 
     return TextButton(
-      child: const Text("Save Recipe"),
       onPressed: progressState.inProgress ? null : saveAction,
+      child: const Text("Save Recipe"),
     );
   }
 }

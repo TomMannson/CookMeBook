@@ -87,9 +87,9 @@ class _PicturePicker extends HookConsumerWidget {
 }
 
 class _RecipeSteps extends HookConsumerWidget {
-  final TextEditingController stepsSection;
+  final TextEditingController stepsController;
 
-  const _RecipeSteps(this.stepsSection);
+  const _RecipeSteps(this.stepsController);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -108,12 +108,8 @@ class _RecipeSteps extends HookConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    child: TextField(
-                      minLines: 6,
-                      maxLines: 2000,
-                      decoration: inputDecoration(),
-                      controller: stepsSection,
-                      enabled: !progressState.inProgress,
+                    child: AiAssistedTextField(
+                      controller: stepsController,
                     ),
                   ),
                 ],

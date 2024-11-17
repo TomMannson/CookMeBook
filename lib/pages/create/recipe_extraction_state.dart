@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:cook_me_book/data/recipe.dart';
+import 'package:cook_me_book/feature/recipe/ai_assisted_recipe_creation.dart';
 import 'package:cook_me_book/infrastructure/ai_recipe_formatter.dart';
 import 'package:cook_me_book/infrastructure/image_picker.dart';
 import 'package:cook_me_book/infrastructure/text_extractor.dart';
@@ -39,9 +40,47 @@ class RecipeExtractionState extends _$RecipeExtractionState {
     return ExtractionProcess();
   }
 
-  void startRecipeExtraction() async {
+  Future<String?> startTextExtraction() async {
     state = state.copyWith(step: ProcessSteps.imageToText);
-    final imageLoadingResult = await imagePicker.loadImageFromGallery();
+    final ImageResult imageLoadingResult =
+        await imagePicker.loadImageFromCamera();
+
+    if (imageLoadingResult is ImageLoaded) {
+      ImageLoaded loadedImafge = imageLoadingResult;
+      final extractedText =
+          await textExtractor.extractTextFromImageFile(loadedImafge.loadedFile);
+      log("Text of recipe extracted");
+      state = state.copyWith(step: ProcessSteps.recipeExtraction);
+      try {
+        final fixedText = await aiFormater.formatTextWith(extractedText);
+
+        log("Text extracted");
+        state = state.copyWith(step: ProcessSteps.idle);
+        return fixedText;
+      } catch (e) {
+        log("Error $e while recipe extraction");
+      }
+    } else {
+      log("Image wasn't selected");
+    }
+
+    state = state.copyWith(step: ProcessSteps.idle);
+  }
+
+  void startRecipeExtraction(AiMenuItem item) async {
+    if (item == AiMenuItem.web) {
+      log("illegal operation");
+      return;
+    }
+
+    state = state.copyWith(step: ProcessSteps.imageToText);
+    late final ImageResult imageLoadingResult;
+
+    if (item == AiMenuItem.galery) {
+      imageLoadingResult = await imagePicker.loadImageFromGallery();
+    } else {
+      imageLoadingResult = await imagePicker.loadImageFromCamera();
+    }
 
     if (imageLoadingResult is ImageLoaded) {
       ImageLoaded loadedImafge = imageLoadingResult;
@@ -64,6 +103,21 @@ class RecipeExtractionState extends _$RecipeExtractionState {
       log("Image wasn't selected");
     }
 
+    state = state.copyWith(step: ProcessSteps.idle, extractedRecipe: null);
+  }
+
+  void startRecipeWebExtraction(String webLink) async {
+    try {
+      state = state.copyWith(step: ProcessSteps.imageToText);
+      final recipe = await aiFormater.scrapeRecipeFromWeb(url: webLink);
+
+      log("Recipe extracted");
+
+      state = state.copyWith(step: ProcessSteps.idle, extractedRecipe: recipe);
+      return;
+    } catch (e) {
+      log("Error $e while recipe extraction");
+    }
     state = state.copyWith(step: ProcessSteps.idle, extractedRecipe: null);
   }
 }

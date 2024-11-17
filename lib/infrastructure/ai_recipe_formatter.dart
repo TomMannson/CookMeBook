@@ -20,6 +20,32 @@ class AiFormater {
       return null;
     }
   }
+
+  Future<String?> formatTextWith(String unformattedText) async {
+    final response = await http.post(
+      Uri.parse("https://hook.eu2.make.com/${Env.recipeWebhook}"),
+      body: {"fix": unformattedText},
+    );
+
+    if (response.statusCode == 200) {
+      return utf8.decode(response.bodyBytes);
+    } else {
+      return null;
+    }
+  }
+
+  Future<Recipe?> scrapeRecipeFromWeb({required String url}) async {
+    final response = await http.post(
+      Uri.parse("https://hook.eu2.make.com/${Env.recipeWebhook}"),
+      body: {"scrapeUrl": url},
+    );
+
+    if (response.statusCode == 200) {
+      return Recipe.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+    } else {
+      return null;
+    }
+  }
 }
 
 @Riverpod(keepAlive: true)
