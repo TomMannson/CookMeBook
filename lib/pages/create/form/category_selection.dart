@@ -15,11 +15,11 @@ class _CategorySelection extends HookConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           const TitleText("Wybierz kategorię"),
-          for (RecipeCategory category in RecipeCategory.values)
+          for (RecipeCategory category in allRecipeCategories)
             ListTile(
               title: Text(category.name),
               leading: Radio<int>(
-                value: RecipeCategory.values.indexOf(category) + 1,
+                value: category.id,
                 groupValue: value,
                 activeColor: Colors.blue,
                 fillColor: WidgetStateProperty.all(Colors.blue),
@@ -110,6 +110,9 @@ class _RecipeSteps extends HookConsumerWidget {
                   Expanded(
                     child: AiAssistedTextField(
                       controller: stepsController,
+                      decoration: inputDecoration(
+                        hintText: "Wprowadź kroki przygotowania",
+                      ),
                     ),
                   ),
                 ],
@@ -133,3 +136,12 @@ VoidCallback useImagePickerAction(
     }
   }, [onImagePicked]);
 }
+
+final List<RecipeCategory> allRecipeCategories = [
+  RecipeCategory.main,
+  RecipeCategory.soup,
+  RecipeCategory.salad,
+  RecipeCategory.snack,
+  RecipeCategory.dessert,
+  RecipeCategory.other,
+];

@@ -74,7 +74,7 @@ RecipeForm useRecipeForm(Recipe? initialRecipe) {
     preparationTimeController: useTwoWaySyncTextFieldSection(
         initialValue: initialRecipe?.preparationTime ?? ''),
     nutritionsFormSection: useRecipeNutritionsFormSection(
-        nutritionsInfo: initialRecipe?.nutritionalInfo ?? NutritionalInfo()),
+        nutritionsInfo: initialRecipe?.nutritionalInfo),
     selectedCategoryNotifier:
         useTwoWaySyncValueNotifier(initialRecipe?.category ?? 0),
     imagePathNotifier: useTwoWaySyncValueNotifier(initialRecipe?.photoPath),
@@ -101,13 +101,17 @@ ValueNotifier<T> useTwoWaySyncValueNotifier<T>(T initialValue) {
 RecipeNutritionsFormSection useRecipeNutritionsFormSection(
     {NutritionalInfo? nutritionsInfo}) {
   final caloriesSection = useTwoWaySyncTextFieldSection(
-      initialValue: nutritionsInfo?.calories.toString() ?? '');
+    initialValue: nutritionsInfo?.calories.toString() ?? '',
+  );
   final proteinsSection = useTwoWaySyncTextFieldSection(
-      initialValue: nutritionsInfo?.protein.toString() ?? '');
+    initialValue: nutritionsInfo?.protein.toString() ?? '',
+  );
   final fatsSection = useTwoWaySyncTextFieldSection(
-      initialValue: nutritionsInfo?.fat.toString() ?? '');
+    initialValue: nutritionsInfo?.fat.toString() ?? '',
+  );
   final carbohydratesSection = useTwoWaySyncTextFieldSection(
-      initialValue: nutritionsInfo?.carbs.toString() ?? '');
+    initialValue: nutritionsInfo?.carbs.toString() ?? '',
+  );
 
   return useMemoized(() {
     return RecipeNutritionsFormSection(

@@ -34,8 +34,9 @@ class DetailPage extends HookConsumerWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              // todo Add sliver to squize header
-              NavBar(windowSize: windowSize),
+              NavBar(
+                windowSize: windowSize,
+              ),
               Expanded(
                 child: recipeDetails.when(
                   data: (data) => showRecipeDetailsOrExit(
@@ -67,18 +68,14 @@ Widget showRecipeDetailsOrExit(
   Recipe? recipe,
   VoidCallback onDelete,
 ) {
-  // useEffect(() {
-  //   if (recipe == null) {
-  //     Navigator.of(context).pop();
-  //   }
-  //   return null;
-  // }, [recipe]);
-
   if (recipe == null) {
     return const Center(child: Text("Recipe not found"));
   }
 
-  return LoadedRecipeDetail(recipe: recipe, onDelete: onDelete);
+  return LoadedRecipeDetail(
+    recipe: recipe,
+    onDelete: onDelete,
+  );
 }
 
 class LoadedRecipeDetail extends StatelessWidget {

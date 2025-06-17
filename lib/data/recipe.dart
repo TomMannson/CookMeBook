@@ -6,15 +6,17 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'recipe.g.dart';
 
 enum RecipeCategory {
-  main('Dania główne'),
-  soup('Zupy'),
-  salad('Sałatki'),
-  snack('Przekąski'),
-  dessert('Desery');
+  main('Dania główne', 1),
+  soup('Zupy', 2),
+  salad('Sałatki', 3),
+  snack('Na słono', 4),
+  dessert('Na słodko', 5),
+  other('Inne', 6);
 
   final String name;
+  final int id;
 
-  const RecipeCategory(this.name);
+  const RecipeCategory(this.name, this.id);
 }
 
 @collection

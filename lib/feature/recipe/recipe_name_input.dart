@@ -21,6 +21,7 @@ class RecipeTitleField extends HookConsumerWidget {
             Expanded(
               child: DecoratedFormField(
                 controller: titleController,
+                hintText: "Nazwa przepisu",
               ),
             ),
             const SizedBox(width: 8),

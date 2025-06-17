@@ -1,5 +1,6 @@
 import 'package:cook_me_book/data/recipe.dart';
 import 'package:cook_me_book/feature/search/search_state.dart';
+import 'package:cook_me_book/pages/create/form/recipe_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -9,28 +10,26 @@ class AppNavMenu extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selectedIndex = useState(0);
+    final selectedCategory = useState<RecipeCategory?>(null);
 
     return Material(
       color: Colors.transparent,
       child: Column(children: [
         _NavItem(
           "Wszystkie",
-          0 == selectedIndex.value,
+          null == selectedCategory.value,
           () {
-            selectedIndex.value = 0;
+            selectedCategory.value = null;
             ref.read(searchStateProvider.notifier).clearCategory();
           },
         ),
-        for (int i = 1; i <= RecipeCategory.values.length; i++)
+        for (RecipeCategory category in allRecipeCategories)
           _NavItem(
-            RecipeCategory.values[i - 1].name,
-            i == selectedIndex.value,
+            category.name,
+            category == selectedCategory.value,
             () {
-              selectedIndex.value = i;
-              ref
-                  .read(searchStateProvider.notifier)
-                  .setCategory(RecipeCategory.values[i - 1]);
+              selectedCategory.value = category;
+              ref.read(searchStateProvider.notifier).setCategory(category);
             },
           )
       ]),

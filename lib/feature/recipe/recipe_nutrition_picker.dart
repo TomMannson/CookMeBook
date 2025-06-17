@@ -19,7 +19,7 @@ class RecipeNutritionPicker extends HookConsumerWidget {
       children: [
         const TitleText("Wartości odżywcze"),
         const Text("odpowiadające jednej porcji"),
-        const SizedBox(height: 8),
+        const SizedBox(height: 16),
         Row(
           children: [
             NutritionalValueField(
@@ -28,14 +28,17 @@ class RecipeNutritionPicker extends HookConsumerWidget {
               keyboardType: TextInputType.number,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             ),
+            const SizedBox(width: 8),
             NutritionalValueField(
               label: "Węgle",
               textController: nutritionsFormSection.carbsController,
             ),
+            const SizedBox(width: 8),
             NutritionalValueField(
               label: "Białko",
               textController: nutritionsFormSection.proteinsController,
             ),
+            const SizedBox(width: 8),
             NutritionalValueField(
               label: "Tłuszcz",
               textController: nutritionsFormSection.fatsController,
@@ -69,14 +72,16 @@ class NutritionalValueField extends HookConsumerWidget {
     final progressState = ref.watch(progressControllerProvider);
 
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(0.0),
       child: SizedBox(
         width: 90,
         child: TextField(
           keyboardType: keyboardType,
           inputFormatters: inputFormatters,
           enabled: !progressState.inProgress,
-          decoration: inputDecoration(),
+          decoration: inputDecoration(
+            labelText: label,
+          ),
           controller: textController,
         ),
       ),

@@ -139,9 +139,17 @@ class ReceipeImage extends StatelessWidget {
   Widget buildImage(String? path) {
     if (path == null) {
       return Container(
+        color: Colors.white,
         height: double.infinity,
         width: double.infinity,
-        color: Colors.white,
+        child: const Padding(
+          padding: EdgeInsets.all(12.0),
+          child: Icon(
+            Icons.image,
+            color: Colors.blue,
+            size: 48,
+          ),
+        ),
       );
     } else {
       return Container(

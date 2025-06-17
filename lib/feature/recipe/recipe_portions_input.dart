@@ -38,7 +38,7 @@ class RecipePortoinsField extends HookConsumerWidget {
                       enabled: !progressState.inProgress,
                       keyboardType: TextInputType.number,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      decoration: inputDecoration(),
+                      decoration: inputDecoration(hintText: "0"),
                       controller: portionsController,
                     ),
                   )
@@ -58,6 +58,7 @@ class RecipePortoinsField extends HookConsumerWidget {
                     width: timeInputWidth,
                     child: DecoratedFormField(
                       controller: timeController,
+                      hintText: "1h 30min",
                     ),
                   ),
                 ],

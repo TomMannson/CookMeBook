@@ -8,8 +8,13 @@ import 'package:cook_me_book/pages/create/recipe_extraction_state.dart';
 
 class AiAssistedTextField extends HookConsumerWidget {
   final TextEditingController controller;
+  final InputDecoration? decoration;
 
-  const AiAssistedTextField({super.key, required this.controller});
+  const AiAssistedTextField({
+    super.key,
+    required this.controller,
+    this.decoration,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -50,7 +55,7 @@ class AiAssistedTextField extends HookConsumerWidget {
       enabled: !progressState.inProgress,
       minLines: 6,
       maxLines: 2000,
-      decoration: inputDecoration(),
+      decoration: decoration,
       controller: controller,
     );
   }

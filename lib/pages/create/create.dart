@@ -21,7 +21,7 @@ class CreationPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final windowSize = MediaQuery.sizeOf(context);
-    final recipe = useState(Recipe());
+    final recipe = useState<Recipe?>(null);
     final form = useRecipeForm(recipe.value);
     final saveAction = useRecipeSave(
       form: form,

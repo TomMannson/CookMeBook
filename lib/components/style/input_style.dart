@@ -1,18 +1,22 @@
-  import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
-InputDecoration inputDecoration() {
-    return const InputDecoration(
-      fillColor: Colors.red,
-      focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(
-          color: Colors.blue,
-        ),
+InputDecoration inputDecoration({String? hintText, String? labelText}) {
+  return InputDecoration(
+    fillColor: Colors.red,
+    focusedBorder: const OutlineInputBorder(
+      borderSide: BorderSide(
+        color: Colors.blue,
       ),
-      border: OutlineInputBorder(
-        borderSide: BorderSide(
-          color: Colors.grey,
-        ),
+    ),
+    border: const OutlineInputBorder(
+      borderSide: BorderSide(
+        color: Colors.grey,
       ),
-      hintText: '',
-    );
-  }
+    ),
+    hintText: hintText,
+    hintStyle: const TextStyle(
+      color: Colors.grey,
+    ),
+    labelText: labelText,
+  );
+}

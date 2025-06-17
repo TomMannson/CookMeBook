@@ -13,19 +13,27 @@ class ImageHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        AspectRatio(
-          aspectRatio: 16 / 9,
-          child: Container(
-            color: Colors.white,
-            child: Image.file(
-              File(recipe.photoPath ?? ""),
-              fit: BoxFit.cover,
+        if (recipe.photoPath != null)
+          AspectRatio(
+            aspectRatio: 16 / 9,
+            child: Container(
+              color: Colors.white,
+              child: Image.file(
+                File(recipe.photoPath ?? ""),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
-        ),
-        IconButton(
-            onPressed: context.pop,
-            icon: const Icon(Icons.arrow_back))
+        if (recipe.photoPath == null)
+          const AspectRatio(
+            aspectRatio: 16 / 9,
+            child: Icon(
+              Icons.image,
+              color: Colors.blue,
+              size: 48,
+            ),
+          ),
+        IconButton(onPressed: context.pop, icon: const Icon(Icons.arrow_back))
       ],
     );
   }

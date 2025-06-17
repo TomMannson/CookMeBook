@@ -40,7 +40,7 @@ class RecipeInfo extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     RecipeNameBar(
-                      name: this.recipe.name,
+                      name: recipe.name,
                       styleTitleLarge: styleTitleLarge,
                       deleteAction: () {
                         return IconButton(
@@ -69,7 +69,7 @@ class RecipeInfo extends StatelessWidget {
                       time: recipe.preparationTime,
                       serving: recipe.servings,
                     ),
-                    SizedBox(height: 32),
+                    const SizedBox(height: 32),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -114,7 +114,7 @@ class RecipeNutritions extends StatelessWidget {
     return Row(
       children: [
         _MeterInfo(
-          value: "$timeText dni",
+          value: timeText,
           icon: Icons.access_time,
         ),
         _MeterInfo(
@@ -125,7 +125,18 @@ class RecipeNutritions extends StatelessWidget {
           value: "${nutritionalInfo.calories} kcal",
           icon: Icons.access_time,
         ),
-        Text("(B=$protein\g, W=$carbs\g, T=$fat\g)"),
+        Expanded(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(
+                "Białko: ${protein.toStringAsFixed(1)}g,     Węglowodany: ${carbs.toStringAsFixed(1)}g,    Tłuszcz: ${fat.toStringAsFixed(1)}g",
+                style: const TextStyle(fontSize: 14),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(width: 16),
       ],
     );
   }

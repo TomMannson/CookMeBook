@@ -33,46 +33,10 @@ class IngredientPicker extends HookConsumerWidget {
                   Expanded(
                     child: AiAssistedTextField(
                       controller: ingredientsSection,
+                      decoration: inputDecoration(
+                        hintText: "Wprowadź składniki",
+                      ),
                     ),
-                    // child: TextField(
-                    //   contextMenuBuilder: (context, editableTextState) {
-                    //     final List<ContextMenuButtonItem> buttonItems =
-                    //         editableTextState.contextMenuButtonItems;
-
-                    //     buttonItems.insert(
-                    //         0,
-                    //         ContextMenuButtonItem(
-                    //           label: 'Quick Ai Camera extractor',
-                    //           onPressed: () async {
-                    //             ContextMenuController.removeAny();
-                    //             final result = await recipeExtraction
-                    //                 .startTextExtraction();
-                    //             if (result != null) {
-                    //               Clipboard.setData(
-                    //                   ClipboardData(text: result));
-                    //             } else {
-                    //               ScaffoldMessenger.of(context).showSnackBar(
-                    //                 const SnackBar(
-                    //                   content: Text(
-                    //                     "Przetworzony text czeka. Urzyj opcji `Wklej`",
-                    //                   ),
-                    //                 ),
-                    //               );
-                    //             }
-                    //           },
-                    //         ));
-
-                    //     return AdaptiveTextSelectionToolbar.buttonItems(
-                    //       anchors: editableTextState.contextMenuAnchors,
-                    //       buttonItems: buttonItems,
-                    //     );
-                    //   },
-                    //   enabled: !progressState.inProgress,
-                    //   minLines: 6,
-                    //   maxLines: 2000,
-                    //   decoration: inputDecoration(),
-                    //   controller: ingredientsSection,
-                    // ),
                   ),
                 ],
               ),

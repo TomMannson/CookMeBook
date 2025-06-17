@@ -12,7 +12,7 @@ class AppMiniNavigationBar extends StatelessWidget {
       child: const Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          AppMiniNavMenu()
+          // AppMiniNavMenu()
         ],
       ),
     );
